@@ -1,0 +1,1 @@
+D:\Java\jdk-11.0.5\bin\java -jar build/libs/TestModSys-1.0.jar 

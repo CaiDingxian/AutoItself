@@ -1,0 +1,124 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.50'
+    //id "org.gradle.java.experimental-jigsaw" version "0.1.1"
+    //id 'java-library'
+    //id 'war'
+    id 'application'
+    id 'maven-publish'
+    //id 'org.akhikhl.gretty' version "2.0.0"
+}
+group 'com.voidgeek'
+version '1.0'
+
+sourceCompatibility = 8
+//javaModule.name = 'org.voidgeek.tms'
+repositories {
+    mavenLocal()
+    maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+    maven { url "https://plugins.gradle.org/m2/" }
+    mavenCentral()
+}
+
+dependencies {
+// https://mvnrepository.com/artifact/org.luaj/luaj-jse
+    compile group: 'org.luaj', name: 'luaj-jse', version: '3.0.1'
+
+    compile 'org.graalvm.truffle:truffle-api:19.0.2'
+    runtime 'org.graalvm.js:js:19.0.2'
+    compile 'org.graalvm.js:js-scriptengine:19.0.2'
+    compile 'org.graalvm.sdk:graal-sdk:19.0.2'
+
+    //runtime 'org.graalvm.tools:profiler:19.0.2'
+    //runtime 'org.graalvm.tools:chromeinspector:19.0.2'
+   // compileOnly "org.akhikhl.gretty:org.akhikhl.gretty:2.0.0"
+    compile 'org.springframework:spring-webmvc:5.0.10.RELEASE'
+    //compile'com.voidgeek:ChatRobot:1.0-SNAPSHOT'
+    compile 'org.jetbrains.kotlin:kotlin-reflect:1.3.10'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.10"
+    compile 'net.java.dev.jna:jna:5.4.0'
+    compile 'net.java.dev.jna:jna-platform:5.4.0'
+     //https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-servlet
+    compile group: 'org.eclipse.jetty', name: 'jetty-servlet', version: '9.4.14.v20181114'
+    // https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-webapp
+    compile group: 'org.eclipse.jetty', name: 'jetty-webapp', version: '9.4.14.v20181114'
+// https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
+    compile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
+// https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-annotations
+    compile group: 'org.eclipse.jetty', name: 'jetty-annotations', version: '9.4.14.v20181114'
+// https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-deploy
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+//gretty {
+//    afterEvaluate {
+//        appStartDebug {//修改debug时的监听端口，默认使用5005端口
+//            debugPort = 5005   //此处填写端口号，如8080,如果修改端口号，则IDEA中的Remote 调试工具中需要填写相同的端口
+//            debugSuspend = true
+//        }
+//    }
+//    scanDir{
+//        "${project.buildDir}/src/main/kotlin"
+//    }
+//    httpPort = 8080
+//    // 'jetty7', 'jetty8', 'jetty9', 'jetty93', 'jetty94', 'tomcat7', 'tomcat8'
+//    servletContainer = 'jetty9'
+//    contextPath = '/'
+//}
+mainClassName = 'blockman.server.ReKt'
+applicationDefaultJvmArgs = ['-Dfile.encoding=UTF-8']
+jar {
+    manifestContentCharset 'utf-8'
+    metadataCharset 'utf-8'
+    manifest {
+        attributes "Main-Class": "blockman.server.ReKt"
+    }
+}
+
+//sourceSets {
+////    main.kotlin.srcDirs += 'src/main/kotlin'
+////    main.java.srcDirs += 'src/main/java'
+////    main.java.outputDir=file("output")
+////    main.kotlin.outputDir=file("output")
+//
+//}
+//sourceSets.main.resources.srcDirs = [
+//        "src/main/java"
+////        "src/main/resources",
+////        "src/main/kotlin"
+//]
+
+//task createdirs {
+//    doLast {
+//        sourceSets*.java.srcDirs*.each {
+//            it.mkdirs()
+//        }
+//        sourcScts*.resources.srcDirs*.each{
+//            it.midirs()
+//        }
+//    }
+//
+//}
+compileKotlin {
+
+    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.javaParameters=true
+}
+
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileJava {
+    //dependsOn('compileKotlin')
+    doFirst {
+        options.compilerArgs = [
+                '--module-path',classpath.asPath,
+        ]
+        classpath = files()
+    }
+}
+
+
