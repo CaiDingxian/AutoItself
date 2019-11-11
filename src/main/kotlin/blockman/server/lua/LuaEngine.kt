@@ -1,5 +1,7 @@
 package org.luaj.vm2.lib.jse
 
+import blockman.swin.caller.api.Input
+import blockman.swin.caller.api.Win
 import blockman.swin.caller.cmd.Cmd
 import org.luaj.vm2.LuaValue
 import org.luaj.vm2.Globals
@@ -41,7 +43,11 @@ class LuaEngine {
 
         val chunk = globals.load(
             """
-            x:fly()
+                -- w:getWinContent6947888
+                --w:setWinContent(6947888,"你好吗")
+            --w:msgChar(6947888,'你',false)
+            --w:msgChar(6947888,'是',false)
+            --w:msgChar(6947888,'猪',false)
         """.trimIndent()
         )
         val s = object : VarArgFunction() {
@@ -55,8 +61,8 @@ class LuaEngine {
 
         Object().getClass()
 
-        //如果设置x=?,将会切断x与LuaValue的连接，GC可以回收对象   
-        globals.set("x", SafeJavaInstance(Cmd()))
+        //如果设置x=?,将会切断x与LuaValue的连接，GC可以回收对象
+        globals.set("w", SafeJavaInstance(Win()))
         val a = chunk.invoke()
         //chunk.call()
         val b = 3

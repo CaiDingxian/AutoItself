@@ -37,8 +37,8 @@ internal class SafeJavaInstance(instance: Any) : JavaInstance(instance) {
     fun allow(clazz: Class<*>, method: Method): Boolean {
         println()
         //print(clazz.name+"."+method.name)
-        print(clazz.name + "." + method.name + " IS NOT ALLOW TO CALL !!!")
-        return false
+        //print(clazz.name + "." + method.name + " IS NOT ALLOW TO CALL !!!")
+        return true
     }
 
 }

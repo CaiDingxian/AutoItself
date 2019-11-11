@@ -1,12 +1,40 @@
 package blockman.swin.caller.api
 
 import blockman.swin.caller.Caller.Companion.u32
+import blockman.swin.caller.constants.Consts.Companion.WM_GETTEXT
+import com.sun.jna.Memory
+import com.sun.jna.Native
 import com.sun.jna.Pointer
+import com.sun.jna.platform.win32.WTypes
 import com.sun.jna.platform.win32.WinDef
 import com.sun.jna.platform.win32.WinUser
+import org.graalvm.polyglot.HostAccess
 import java.util.regex.Pattern
 
 class Win {
+
+    fun getWinContent(hwnd: Long) {
+        var strs = Native.malloc(Native.WCHAR_SIZE * 100L)
+        u32.SendMessage(
+            WinDef.HWND(Pointer(hwnd)), WM_GETTEXT, WinDef.WPARAM(16), WinDef.LPARAM(strs)
+        )
+        val b = WTypes.LPWSTR(Pointer(strs)).value
+        Native.free(strs)
+        print(b)
+    }
+
+    @HostAccess.Export
+    fun setWinContent(hwnd: Long, text: String): Long {
+        val WM_SETTEXT = 0x000C
+        val peer = Pointer.createConstant(hwnd)
+        val hwndObj = WinDef.HWND(peer)
+        val p = Pointer.nativeValue(WTypes.LPWSTR(text).pointer)
+        val ret = u32.SendMessage(
+            hwndObj, WM_SETTEXT,
+            WinDef.WPARAM(0), WinDef.LPARAM(p)
+        )
+        return ret.toLong()
+    }
 
     fun genWinPath(hwnd: Long): MutableList<MutableMap<String, Any?>> {
         var gh: WinDef.HWND? = WinDef.HWND(Pointer(hwnd))
@@ -63,20 +91,22 @@ class Win {
 
 fun main() {
 
-    val h = u32.FindWindow(null, "下载")
+    Win().getWinContent(6947888)
 
-    val desktop = u32.GetDesktopWindow()
-
-    val pathStr =
-        "class:[[SunAwtFrame]] title:[[TestModSys [D:\\DEV\\TestModSys0\\TestModSys] - ...\\src\\main\\kotlin\\blockman\\swin\\caller\\api\\Win.kt [TestModSys.main] - IntelliJ IDEA (Administrator)]] \n"
-    val pathStrs = pathStr.split("=>")
-    for (pStr in pathStrs) {
-        val c = Pattern.compile("class:\\[\\[(.*?)\\]\\]")
-        val m = c.matcher(pStr)
-        m.find()
-        val g = m.group(1)
-        val x = 0
-    }
+//    val h = u32.FindWindow(null, "下载")
+//
+//    val desktop = u32.GetDesktopWindow()
+//
+//    val pathStr =
+//        "class:[[SunAwtFrame]] title:[[TestModSys [D:\\DEV\\TestModSys0\\TestModSys] - ...\\src\\main\\kotlin\\blockman\\swin\\caller\\api\\Win.kt [TestModSys.main] - IntelliJ IDEA (Administrator)]] \n"
+//    val pathStrs = pathStr.split("=>")
+//    for (pStr in pathStrs) {
+//        val c = Pattern.compile("class:\\[\\[(.*?)\\]\\]")
+//        val m = c.matcher(pStr)
+//        m.find()
+//        val g = m.group(1)
+//        val x = 0
+//    }
 //    val win=Win()
 //    while(true)
 //    {

@@ -32,10 +32,11 @@ class Input {
     }
 
     @HostAccess.Export
-    fun msgChar(hwnd: Long, charCode: Int, byUnicode: Boolean): Long {
+    fun msgChar(hwnd: Long, charCode: String, byUnicode: Boolean): Long {
+        //写一个字符串转换，将Home转Home键码
         val ret = Caller.u32.SendMessage(
             WinDef.HWND(Pointer(hwnd)), if (byUnicode) WM_UNICHAR else WM_CHAR,
-            WinDef.WPARAM(0), WinDef.LPARAM(charCode.toLong())
+            WinDef.WPARAM(charCode[0].toLong()), WinDef.LPARAM(0)
         )
         return ret.toLong()
     }
