@@ -20,7 +20,6 @@ import com.sun.jna.platform.win32.User32
 import com.sun.jna.platform.win32.BaseTSD
 import java.awt.event.KeyEvent
 
-
 class Act {
 
     @HostAccess.Export

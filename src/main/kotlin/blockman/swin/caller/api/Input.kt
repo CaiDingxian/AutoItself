@@ -33,7 +33,6 @@ class Input {
 
     @HostAccess.Export
     fun msgChar(hwnd: Long, charCode: Int, byUnicode: Boolean): Long {
-
         val ret = Caller.u32.SendMessage(
             WinDef.HWND(Pointer(hwnd)), if (byUnicode) WM_UNICHAR else WM_CHAR,
             WinDef.WPARAM(0), WinDef.LPARAM(charCode.toLong())

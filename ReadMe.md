@@ -1,4 +1,7 @@
-# BlockMan项目
+# Sword10K项目
+
+万剑精灵不是按键精灵
+Sword10K可以控制批量Windwos电脑执行自动操作
 
 ## 支持函数
 
