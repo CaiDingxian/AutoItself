@@ -43,6 +43,10 @@ class LuaEngine {
 
         val chunk = globals.load(
             """
+                function a() 
+                    return 0 
+                end
+                w:go(a)
                 -- w:getWinContent6947888
                 --w:setWinContent(6947888,"你好吗")
             --w:msgChar(6947888,'你',false)

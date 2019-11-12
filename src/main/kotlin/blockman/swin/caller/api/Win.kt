@@ -9,9 +9,15 @@ import com.sun.jna.platform.win32.WTypes
 import com.sun.jna.platform.win32.WinDef
 import com.sun.jna.platform.win32.WinUser
 import org.graalvm.polyglot.HostAccess
+import java.lang.reflect.Method
 import java.util.regex.Pattern
 
 class Win {
+    fun go(any: String)
+    {
+
+        val a=0
+    }
 
     @HostAccess.Export
     fun findWin(className: String?, name: String?): Long? {
