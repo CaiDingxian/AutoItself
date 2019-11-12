@@ -4,7 +4,7 @@ import com.sun.jna.Pointer
 import com.sun.jna.platform.win32.*
 
 
-interface U32Ext : User32 {
+interface User32Ext : User32 {
 
     fun WindowFromPoint(point: WinDef.POINT): WinDef.HWND
 

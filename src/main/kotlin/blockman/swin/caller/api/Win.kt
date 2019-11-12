@@ -13,6 +13,21 @@ import java.util.regex.Pattern
 
 class Win {
 
+    @HostAccess.Export
+    fun findWin(className: String?, name: String?): Long? {
+        return Pointer.nativeValue(u32.FindWindow(className, name).pointer)
+    }
+
+    @HostAccess.Export
+    fun msgBox(title: String, content: String): Int {
+        return u32.MessageBoxW(
+            WinDef.HWND(null),
+            WTypes.LPWSTR(title),
+            WTypes.LPWSTR(content),
+            WinDef.UINT(0x00000004L)
+        )
+    }
+
     fun getWinContent(hwnd: Long) {
         var strs = Native.malloc(Native.WCHAR_SIZE * 100L)
         u32.SendMessage(
@@ -35,6 +50,7 @@ class Win {
         )
         return ret.toLong()
     }
+
 
     fun genWinPath(hwnd: Long): MutableList<MutableMap<String, Any?>> {
         var gh: WinDef.HWND? = WinDef.HWND(Pointer(hwnd))
@@ -95,7 +111,7 @@ fun main() {
 
 //    val h = u32.FindWindow(null, "下载")
 //
-//    val desktop = u32.GetDesktopWindow()
+    val desktop = u32.GetDesktopWindow()
 //
 //    val pathStr =
 //        "class:[[SunAwtFrame]] title:[[TestModSys [D:\\DEV\\TestModSys0\\TestModSys] - ...\\src\\main\\kotlin\\blockman\\swin\\caller\\api\\Win.kt [TestModSys.main] - IntelliJ IDEA (Administrator)]] \n"
@@ -107,32 +123,31 @@ fun main() {
 //        val g = m.group(1)
 //        val x = 0
 //    }
-//    val win=Win()
-//    while(true)
-//    {
-//        Thread.sleep(500)
-////        val a=win.getWinQueryOrder(WinDef.HWND(Pointer(2294674)),WinDef.HWND(Pointer(4064020)),"Edit","")
-////
-////        print(a)
-//        val guiInfo = WinUser.GUITHREADINFO()
-//        u32.GetGUIThreadInfo(0, guiInfo)
-//        val hwnd = guiInfo.hwndFocus
-//        if(hwnd!=null) {
-//            val ml = win.genWinPath(Pointer.nativeValue(hwnd.pointer))
-//            for ((i,m) in ml.withIndex()) {
+    val win = Win()
+    while (true) {
+        Thread.sleep(500)
+//        val a=win.getWinQueryOrder(WinDef.HWND(Pointer(2294674)),WinDef.HWND(Pointer(4064020)),"Edit","")
 //
-//                if(m["hwnd"] !=desktop) {
-//                    if(i!=1) print("=>")
-//                    //"{{"+m["title"] as String + " " + m["clazz"] + " " + m["num"]
-//                    var numStr=m["num"]
-//                    if(numStr==0) numStr=""
-//                    else numStr= "num:[["+m["num"]+"]]"
-//                    print("class:[[${m["clazz"]}]] title:[[${m["title"]}]] "+numStr)
-//                }
-//            }
-//            println()
-//        }
-//    }
+//        print(a)
+        val guiInfo = WinUser.GUITHREADINFO()
+        u32.GetGUIThreadInfo(0, guiInfo)
+        val hwnd = guiInfo.hwndFocus
+        if (hwnd != null) {
+            val ml = win.genWinPath(Pointer.nativeValue(hwnd.pointer))
+            for ((i, m) in ml.withIndex()) {
+
+                if (m["hwnd"] != desktop) {
+                    if (i != 1) print("=>")
+                    //"{{"+m["title"] as String + " " + m["clazz"] + " " + m["num"]
+                    var numStr = m["num"]
+                    if (numStr == 0) numStr = ""
+                    else numStr = "num:[[" + m["num"] + "]]"
+                    print("class:[[${m["clazz"]}]] title:[[${m["title"]}]] " + numStr)
+                }
+            }
+            println()
+        }
+    }
 
 
 }

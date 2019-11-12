@@ -24,7 +24,6 @@ class Binder {
         for (m in methods) {
             funsCache.put(m.name + "#" + m.parameterTypes.size, m)
         }
-
         val luaMethod = object : VarArgFunction() {
             override fun invoke(args: Varargs): LuaValue {
                 val key = this.name + args.narg()
