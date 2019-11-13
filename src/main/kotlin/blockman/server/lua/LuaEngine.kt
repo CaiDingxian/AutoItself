@@ -64,7 +64,6 @@ class LuaEngine {
         val any = Any()
 
         Object().getClass()
-
         //如果设置x=?,将会切断x与LuaValue的连接，GC可以回收对象
         globals.set("w", SafeJavaInstance(Win()))
         val a = chunk.invoke()
