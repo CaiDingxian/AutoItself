@@ -25,6 +25,23 @@ class Win {
     }
 
     @HostAccess.Export
+    fun findWinEx(hwnd: Long?, chwnd: Long?, className: String?, name: String?): Long? {
+
+        return Pointer.nativeValue(
+            u32.FindWindowEx(
+                hwnd?.let { WinDef.HWND(Pointer(it)) },
+                chwnd?.let { WinDef.HWND(Pointer(it)) },
+                className, name
+            ).pointer
+        )
+    }
+
+    fun QueryWin(qStr: String): Long? {
+
+        return null
+    }
+
+    @HostAccess.Export
     fun msgBox(title: String, content: String): Int {
         return u32.MessageBoxW(
             WinDef.HWND(null),
@@ -108,16 +125,40 @@ class Win {
         }
     }
 
+    fun genWinQueryStr(hwndNum: Long): String {
+        var q = ""
+        val desktop = u32.GetDesktopWindow()
+
+        //val hwnd = guiInfo.hwndFocus
+        val hwnd = WinDef.HWND(Pointer(hwndNum))
+        if (hwnd != null) {
+            val ml = genWinPath(Pointer.nativeValue(hwnd.pointer))
+            for ((i, m) in ml.withIndex()) {
+
+                if (m["hwnd"] != desktop) {
+                    if (i != 1) q += "=>"
+                    //"{{"+m["title"] as String + " " + m["clazz"] + " " + m["num"]
+                    var numStr = m["num"]
+                    if (numStr == 0) numStr = ""
+                    else numStr = "num:[[" + m["num"] + "]]"
+                    q += "class:[[${m["clazz"]}]] title:[[${m["title"]}]] " + numStr
+                }
+            }
+            println(q)
+        }
+        return q
+    }
+
 
 }
 
 fun main() {
 
-    Win().getWinContent(6947888)
+    //Win().getWinContent(6947888)
 
 //    val h = u32.FindWindow(null, "下载")
 //
-    val desktop = u32.GetDesktopWindow()
+
 //
 //    val pathStr =
 //        "class:[[SunAwtFrame]] title:[[TestModSys [D:\\DEV\\TestModSys0\\TestModSys] - ...\\src\\main\\kotlin\\blockman\\swin\\caller\\api\\Win.kt [TestModSys.main] - IntelliJ IDEA (Administrator)]] \n"
@@ -133,26 +174,11 @@ fun main() {
     while (true) {
         Thread.sleep(500)
 //        val a=win.getWinQueryOrder(WinDef.HWND(Pointer(2294674)),WinDef.HWND(Pointer(4064020)),"Edit","")
-//
-//        print(a)
         val guiInfo = WinUser.GUITHREADINFO()
         u32.GetGUIThreadInfo(0, guiInfo)
-        val hwnd = guiInfo.hwndFocus
-        if (hwnd != null) {
-            val ml = win.genWinPath(Pointer.nativeValue(hwnd.pointer))
-            for ((i, m) in ml.withIndex()) {
+        val q = win.genWinQueryStr(Pointer.nativeValue(guiInfo.hwndFocus?.pointer))
+        print(q)
 
-                if (m["hwnd"] != desktop) {
-                    if (i != 1) print("=>")
-                    //"{{"+m["title"] as String + " " + m["clazz"] + " " + m["num"]
-                    var numStr = m["num"]
-                    if (numStr == 0) numStr = ""
-                    else numStr = "num:[[" + m["num"] + "]]"
-                    print("class:[[${m["clazz"]}]] title:[[${m["title"]}]] " + numStr)
-                }
-            }
-            println()
-        }
     }
 
 

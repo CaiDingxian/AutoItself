@@ -17,7 +17,7 @@ class Caller {
         @JvmStatic
         val k32 = Native.load("kernel32", K32Ext::class.java, W32APIOptions.DEFAULT_OPTIONS) as K32Ext
         @JvmStatic
-        val adv32 = Native.load("Advapi32", Adv32Ext::class.java, W32APIOptions.DEFAULT_OPTIONS) as Adv32Ext
+        val adv32 = Native.load("advapi32", Adv32Ext::class.java, W32APIOptions.DEFAULT_OPTIONS) as Adv32Ext
 
     }
 }

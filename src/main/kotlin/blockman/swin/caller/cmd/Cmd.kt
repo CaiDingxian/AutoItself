@@ -120,18 +120,18 @@ class Cmd : Closeable {
     }
 
     companion object {
-        fun go() {
-            print("OK GO")
+        fun exec(cmd: String): Int {
+            val runtime = Runtime.getRuntime()
+            val p = runtime.exec(cmd)
+            p.waitFor()
+            return p.exitValue()
         }
     }
 
-    fun fly() {
-        print("OK FLY")
-    }
+
 }
 
 fun main() {
-
 
     //print(a[0]!!.javaClass)
 
