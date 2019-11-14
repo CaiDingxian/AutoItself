@@ -1,9 +1,8 @@
-package blockman.swin.caller.api
+package blockman.native.api
 
-import blockman.swin.caller.Caller
-import blockman.swin.caller.constants.Consts
-import blockman.swin.caller.constants.Consts.Companion.WM_LBUTTONUP
-import blockman.swin.caller.constants.Consts.Companion.WM_UNICHAR
+import blockman.native.Libs.Companion.u32
+import blockman.native.constants.Consts
+import blockman.native.constants.Consts.Companion.WM_UNICHAR
 import com.sun.jna.Pointer
 import com.sun.jna.platform.win32.BaseTSD
 import com.sun.jna.platform.win32.User32
@@ -18,7 +17,7 @@ class Input {
     @HostAccess.Export
     fun fixWinTop(hwnd: Long): Boolean {
 
-        return Caller.u32.SetWindowPos(
+        return u32.SetWindowPos(
             WinDef.HWND(Pointer(hwnd)),
             WinDef.HWND(Pointer(Consts.HWND_TOPMOST)),
             0, 0, 0, 0, Consts.SWP_ASYNCWINDOWPOS xor Consts.SWP_NOMOVE xor Consts.SWP_NOSIZE
@@ -30,7 +29,7 @@ class Input {
         Thread.sleep(1000)
         val pos = WinDef.LPARAM(x.toLong() + (y.toLong() shl 16))
 
-        val lresult = Caller.u32.SendMessage(
+        val lresult = u32.SendMessage(
             WinDef.HWND(Pointer(hwnd)),
             action, WinDef.WPARAM(0), pos
         )
@@ -48,7 +47,7 @@ class Input {
     @HostAccess.Export
     fun msgChar(hwnd: Long, charCode: String, byUnicode: Boolean): Long {
         //写一个字符串转换，将Home转Home键码
-        val ret = Caller.u32.SendMessage(
+        val ret = u32.SendMessage(
             WinDef.HWND(Pointer(hwnd)), if (byUnicode) WM_UNICHAR else WM_CHAR,
             WinDef.WPARAM(charCode[0].toLong()), WinDef.LPARAM(0)
         )
@@ -63,7 +62,7 @@ class Input {
 
         input.type = WinDef.DWORD(WinUser.INPUT.INPUT_KEYBOARD.toLong())
         input.input.setType("ki") // Because setting INPUT_INPUT_KEYBOARD is not enough: https://groups.google.com/d/msg/jna-users/NDBGwC1VZbU/cjYCQ1CjBwAJ
-        input.input.ki.wScan = WinDef.WORD(Caller.u32.MapVirtualKeyW(KeyEvent.VK_5, WinUser.MAPVK_VK_TO_VSC))
+        input.input.ki.wScan = WinDef.WORD(u32.MapVirtualKeyW(KeyEvent.VK_5, WinUser.MAPVK_VK_TO_VSC))
         input.input.ki.time = WinDef.DWORD(0)
         input.input.ki.dwExtraInfo = BaseTSD.ULONG_PTR(0)
         // Press "a"

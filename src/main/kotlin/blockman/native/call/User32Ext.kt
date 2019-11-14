@@ -1,6 +1,5 @@
-package blockman.swin.caller.ext
+package blockman.native.call
 
-import com.sun.jna.Pointer
 import com.sun.jna.platform.win32.*
 
 

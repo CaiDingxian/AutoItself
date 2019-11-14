@@ -1,4 +1,4 @@
-package blockman.swin.caller.constants
+package blockman.native.constants
 
 class Consts {
     companion object {

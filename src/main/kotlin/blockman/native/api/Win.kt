@@ -1,16 +1,13 @@
-package blockman.swin.caller.api
+package blockman.native.api
 
-import blockman.swin.caller.Caller.Companion.u32
-import blockman.swin.caller.constants.Consts.Companion.WM_GETTEXT
-import com.sun.jna.Memory
+import blockman.native.Libs.Companion.u32
+import blockman.native.constants.Consts.Companion.WM_GETTEXT
 import com.sun.jna.Native
 import com.sun.jna.Pointer
 import com.sun.jna.platform.win32.WTypes
 import com.sun.jna.platform.win32.WinDef
 import com.sun.jna.platform.win32.WinUser
 import org.graalvm.polyglot.HostAccess
-import java.lang.reflect.Method
-import java.util.regex.Pattern
 
 class Win {
     fun go(any: String)

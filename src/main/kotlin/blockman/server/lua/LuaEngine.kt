@@ -1,15 +1,12 @@
 package org.luaj.vm2.lib.jse
 
-import blockman.swin.caller.api.Input
-import blockman.swin.caller.api.Win
-import blockman.swin.caller.cmd.Cmd
+import blockman.native.api.Win
 import org.luaj.vm2.LuaValue
 import org.luaj.vm2.Globals
 import org.luaj.vm2.LoadState
 import org.luaj.vm2.Varargs
 import org.luaj.vm2.compiler.LuaC
 import org.luaj.vm2.lib.*
-import org.luaj.vm2.lib.jse.*
 
 val globals = Globals()
 fun main() {

@@ -1,12 +1,12 @@
-package blockman.swin.caller.api
+package blockman.native.api
 
-import blockman.swin.caller.Caller
+import blockman.native.Libs.Companion.k32
 import org.graalvm.polyglot.HostAccess
 
 class Sys {
 
     @HostAccess.Export
     fun getLastError(): Int {
-        return Caller.k32.GetLastError()
+        return k32.GetLastError()
     }
 }

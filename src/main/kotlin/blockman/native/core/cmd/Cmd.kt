@@ -1,11 +1,9 @@
-package blockman.swin.caller.cmd
+package blockman.native.core.cmd
 
-import com.sun.jna.platform.win32.COM.WbemcliUtil
 import java.io.*
 import java.util.*
 import java.util.regex.Pattern
 import kotlin.collections.HashMap
-import kotlin.reflect.jvm.kotlinFunction
 
 class Cmd : Closeable {
 
@@ -89,7 +87,11 @@ class Cmd : Closeable {
 
         val a = process?.exitValue()
         val clearCmdOutput = cmdOutput.replace(Regex("\\r\\n" + uuid + "START" + "(.*)" + uuid + "END\\r\\n"), "")
-        return CmdResult(outputVars, clearCmdOutput, errOutput.toString().replace("ERR_END", ""))
+        return CmdResult(
+            outputVars,
+            clearCmdOutput,
+            errOutput.toString().replace("ERR_END", "")
+        )
     }
 
     override fun close() {

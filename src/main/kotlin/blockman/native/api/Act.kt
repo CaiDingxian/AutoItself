@@ -1,16 +1,8 @@
 package com.voidgeek.blockman.swinapi
 
-import blockman.swin.caller.Caller
-import blockman.swin.caller.Caller.Companion.k32
-import blockman.swin.caller.Caller.Companion.u32
-import blockman.swin.caller.cmd.Cmd
-import blockman.swin.caller.constants.*
-import blockman.swin.caller.constants.Consts.Companion.HWND_TOPMOST
-import blockman.swin.caller.constants.Consts.Companion.SWP_ASYNCWINDOWPOS
-import blockman.swin.caller.constants.Consts.Companion.SWP_NOMOVE
-import blockman.swin.caller.constants.Consts.Companion.SWP_NOSIZE
+import blockman.native.Libs.Companion.k32
+import blockman.native.Libs.Companion.u32
 import com.sun.jna.Pointer
-import com.sun.jna.platform.win32.*
 import com.sun.jna.platform.win32.WinUser.KEYBDINPUT.*
 import org.graalvm.polyglot.HostAccess
 import java.awt.event.KeyEvent.VK_B
@@ -18,7 +10,6 @@ import com.sun.jna.platform.win32.WinUser
 import com.sun.jna.platform.win32.WinDef
 import com.sun.jna.platform.win32.User32
 import com.sun.jna.platform.win32.BaseTSD
-import java.awt.event.KeyEvent
 
 class Act {
 

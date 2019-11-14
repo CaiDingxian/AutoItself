@@ -1,14 +1,14 @@
-package blockman.swin.caller
+package blockman.native
 
 
-import blockman.swin.caller.ext.Adv32Ext
-import blockman.swin.caller.ext.Imm32Ext
-import blockman.swin.caller.ext.K32Ext
-import blockman.swin.caller.ext.User32Ext
+import blockman.native.call.Adv32Ext
+import blockman.native.call.Imm32Ext
+import blockman.native.call.K32Ext
+import blockman.native.call.User32Ext
 import com.sun.jna.Native
 import com.sun.jna.win32.W32APIOptions
 
-class Caller {
+class Libs {
     companion object {
         @JvmStatic
         val u32 = Native.load("user32", User32Ext::class.java, W32APIOptions.DEFAULT_OPTIONS) as User32Ext

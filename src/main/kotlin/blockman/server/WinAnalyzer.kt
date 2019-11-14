@@ -1,27 +1,25 @@
 package blockman.server
 
-import blockman.swin.caller.Caller
+import blockman.native.Libs.Companion.u32
 import com.sun.jna.Native
-import com.sun.jna.Pointer
 import com.sun.jna.platform.win32.User32
 import com.sun.jna.platform.win32.WinDef
 import com.sun.jna.platform.win32.WinUser
 import com.sun.jna.win32.W32APIOptions
-import com.voidgeek.blockman.swinapi.Act
 import kotlin.random.Random
 
 fun main() {
-    var h = Caller.u32.WindowFromPoint(WinDef.POINT(5, 1080))
+    var h = u32.WindowFromPoint(WinDef.POINT(5, 1080))
     while (h == null) {
-        h = Caller.u32.WindowFromPoint(WinDef.POINT(Random.nextInt(0, 1000), Random.nextInt(0, 1000)))
+        h = u32.WindowFromPoint(WinDef.POINT(Random.nextInt(0, 1000), Random.nextInt(0, 1000)))
     }
 
     var className = CharArray(100)
-    Caller.u32.GetClassName(h, className, 100)
+    u32.GetClassName(h, className, 100)
     print(String(className).trim() + " ")
 
     var winText = CharArray(100)
-    Caller.u32.GetWindowText(h, winText, 100)
+    u32.GetWindowText(h, winText, 100)
     print(String(winText).trim() + " ")
 //WinAnalyzer().analyze()
 }

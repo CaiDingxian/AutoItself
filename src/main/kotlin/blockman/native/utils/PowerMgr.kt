@@ -1,4 +1,4 @@
-package blockman.swin.utils
+package blockman.native.utils
 
 import java.io.BufferedReader
 import java.io.IOException

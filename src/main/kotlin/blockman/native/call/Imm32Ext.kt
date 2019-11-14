@@ -1,4 +1,4 @@
-package blockman.swin.caller.ext
+package blockman.native.call
 
 import com.sun.jna.platform.win32.WTypes
 import com.sun.jna.platform.win32.WinDef

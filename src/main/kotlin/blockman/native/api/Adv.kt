@@ -1,14 +1,10 @@
-package blockman.swin.caller.api
+package blockman.native.api
 
-import blockman.swin.caller.Caller.Companion.adv32
-import blockman.swin.caller.Caller.Companion.k32
-import blockman.swin.caller.Caller.Companion.u32
-import com.sun.jna.WString
+import blockman.native.Libs.Companion.adv32
+import blockman.native.Libs.Companion.k32
 import com.sun.jna.platform.win32.Advapi32.RRF_RT_ANY
-import com.sun.jna.platform.win32.Advapi32.RRF_RT_REG_SZ
 import com.sun.jna.platform.win32.WinNT.*
 import com.sun.jna.platform.win32.WinReg
-import com.sun.jna.platform.win32.WinReg.HKEY_CURRENT_USER
 import com.sun.jna.platform.win32.WinReg.HKEY_LOCAL_MACHINE
 import com.sun.jna.ptr.IntByReference
 
@@ -32,9 +28,11 @@ class Adv {
         while (enumRet != ERROR_NO_MORE_ITEMS) {
             val lpcName = IntByReference(100)
             var name = CharArray(1000)
+            val className = CharArray(1000)
+            val classNameSize = IntByReference(100)
             enumRet = adv32.RegEnumKeyEx(
                 hKeyRef.value, i, name, lpcName,
-                null, null, null, null
+                null, className, classNameSize, null
             )
             i++
             keys.add(String(name).replace("\u0000", ""))

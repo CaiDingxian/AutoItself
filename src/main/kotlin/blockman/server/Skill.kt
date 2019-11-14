@@ -1,17 +1,14 @@
 package blockman.server
 
-import blockman.swin.caller.Caller
-import com.sun.jna.platform.win32.User32Util
-import java.lang.reflect.Method
-import kotlin.concurrent.schedule
-import kotlin.jvm.internal.Ref
+import blockman.native.Libs.Companion.u32
+
 
 fun main() {
     val t = System.currentTimeMillis()
     for (i in 1..10000) {
-        val a = Caller.u32.FindWindow("456", "456465")
-        val b = Caller.u32.FindWindow("A", "A")
-        val c = Caller.u32.FindWindow("B", "B")
+        val a = u32.FindWindow("456", "456465")
+        val b = u32.FindWindow("A", "A")
+        val c = u32.FindWindow("B", "B")
 
     }
     print(System.currentTimeMillis() - t)
