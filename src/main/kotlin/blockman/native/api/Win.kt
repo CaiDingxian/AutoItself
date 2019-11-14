@@ -17,13 +17,27 @@ class Win {
     }
 
     @HostAccess.Export
+    fun getTopWin(): Long? {
+        return Pointer.nativeValue(u32.GetForegroundWindow().pointer)
+    }
+
+    @HostAccess.Export
+    fun getFocusWin(): Long? {
+        return Pointer.nativeValue(u32.GetFocus().pointer)
+    }
+
+    @HostAccess.Export
+    fun getActiveWin(): Long? {
+        return Pointer.nativeValue(u32.GetActiveWindow().pointer)
+    }
+
+    @HostAccess.Export
     fun findWin(className: String?, name: String?): Long? {
         return Pointer.nativeValue(u32.FindWindow(className, name).pointer)
     }
 
     @HostAccess.Export
     fun findWinEx(hwnd: Long?, chwnd: Long?, className: String?, name: String?): Long? {
-
         return Pointer.nativeValue(
             u32.FindWindowEx(
                 hwnd?.let { WinDef.HWND(Pointer(it)) },
@@ -33,18 +47,28 @@ class Win {
         )
     }
 
+    fun closeWin(hwnd: Long): Boolean {
+        return u32.CloseWindow(WinDef.HWND(Pointer(hwnd)))
+    }
+
     fun QueryWin(qStr: String): Long? {
 
         return null
     }
 
+    fun getWinTitle(hwnd: Long): String {
+        val str = CharArray(100)
+        u32.GetWindowText(WinDef.HWND(Pointer(hwnd)), str, 100)
+        return String(str).replace("\u0000", "")
+    }
+
     @HostAccess.Export
-    fun msgBox(title: String, content: String): Int {
+    fun msgBox(title: String, content: String, boxType: Long): Int {
         return u32.MessageBoxW(
             WinDef.HWND(null),
             WTypes.LPWSTR(title),
             WTypes.LPWSTR(content),
-            WinDef.UINT(0x00000004L)
+            WinDef.UINT(boxType)
         )
     }
 
