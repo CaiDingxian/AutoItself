@@ -2,18 +2,30 @@ package blockman.server.app
 
 
 import org.eclipse.jetty.server.Server
+import org.eclipse.jetty.util.resource.Resource
 
 import org.eclipse.jetty.webapp.WebAppContext
+import org.springframework.core.io.ClassPathResource
+import org.springframework.web.SpringServletContainerInitializer
+import java.io.File
 
-
-fun main() {
-    AppServer().runAndScan()
-}
-
-
+//运行方法 java -cp ./classes;./lib/* blockman.server.app.AppServer
+//cp是classpath的缩写
 class AppServer {
+    companion object {
+        private val DEFAULT_PORT = 8080
+        private val CONTEXT_PATH = "/"
+        private val MAPPING_URL = "/*"
+        @JvmStatic
+        fun main(vararg args: String) {
+            AppServer().start()
+        }
+    }
 
-    fun runAndScan() {
+    fun start() {
+
+        val domain = this.javaClass.getResource("/")
+
         val server = Server(8080)
 //http://localhost:8080/brand/getById?id=1
         //Enable parsing of jndi-related parts of web.xml and jetty-env.xml
@@ -23,6 +35,7 @@ class AppServer {
             "org.eclipse.jetty.plus.webapp.EnvConfiguration",
             "org.eclipse.jetty.plus.webapp.PlusConfiguration"
         )
+
         classlist.addBefore(
             "org.eclipse.jetty.webapp.JettyWebXmlConfiguration",
             "org.eclipse.jetty.annotations.AnnotationConfiguration"
@@ -31,23 +44,20 @@ class AppServer {
         //Create a WebApp
         val webapp = WebAppContext()
         webapp.contextPath = "/"
-        webapp.resourceBase = "E:\\DEV\\Project\\libgdx\\TestModSys\\build\\classes\\kotlin\\main"
-        //webapp.war="E:\\DEV\\Project\\libgdx\\TestModSys\\build\\libs\\TestModSys-1.0.war"
-//        webapp.war =
-//            "E:\\DEV\\Project\\2019\\CShop\\build\\libs\\CShop.war"
+        webapp.resourceBase = File(domain.toURI()).resolveSibling("").resolveSibling("").absolutePath
+        //webapp.baseResource= Resource.newClassPathResource("/")
+        //webapp.resourceBase =  Resource.newClassPathResource("/").file.path
+        //webapp.war = "E:\\DEV\\Project\\2019\\CShop\\build\\libs\\CShop.war"
         server.handler = webapp
-
+        server.stopAtShutdown = true
+        //webapp.overrideDescriptor
         //Register new transaction manager in JNDI
         //At runtime, the webapp accesses this as java:comp/UserTransaction
 
         //Define an env entry with webapp scope.
         val maxAmount = org.eclipse.jetty.plus.jndi.EnvEntry(webapp, "maxAmount", 100, true)
-
-
-//        server.start()
-//        server.join()
         server.start()
-//        SpringServletContainerInitializer().onStartup(null,handler.servletContext)
+        //SpringServletContainerInitializer().onStartup(null,handler.servletContext)
 //        //ServletContainerInitializersStarter(handler).start()
         server.join()
     }
@@ -95,12 +105,6 @@ class AppServer {
 
         //server.setHandler(servletContextHandler(webApplicationContext()));
 
-    }
-
-    companion object {
-        private val DEFAULT_PORT = 8080
-        private val CONTEXT_PATH = "/"
-        private val MAPPING_URL = "/*"
     }
 
     //    private ServletContextHandler servletContextHandler(WebApplicationContext context) {

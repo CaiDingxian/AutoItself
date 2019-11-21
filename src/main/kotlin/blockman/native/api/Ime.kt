@@ -121,7 +121,7 @@ class Ime {
 
             val isMatched = cond.test(arrayOf(keyNameStr, valueStr))
             if (isMatched) {
-                //adv32.RegDeleteTreeW(hKeyRef.value,keyNameStr)
+                adv32.RegDeleteTreeW(hKeyRef.value, keyNameStr)
                 println("DELETE： $keyNameStr")
             }
         }
@@ -155,6 +155,6 @@ class Ime {
 
 
 fun main() {
-    //Ime().immDelIfNameLike("^Danish$")
+    Ime().immDelIfNameLike("^Danish$")
     //Ime().rebuildPreload()
 }

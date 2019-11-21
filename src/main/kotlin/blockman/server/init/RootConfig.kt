@@ -22,9 +22,9 @@ import java.text.SimpleDateFormat
 import java.util.Properties
 
 @Configuration
-@EnableAspectJAutoProxy
+//@EnableAspectJAutoProxy
 @Lazy
-@ComponentScan(value = ["blockman.server.app"])
+@ComponentScan(value = ["blockman.server.controller"])
 open class RootConfig : WebMvcConfigurer {
 
 
@@ -98,12 +98,12 @@ open class RootConfig : WebMvcConfigurer {
 
     companion object {
 
-        @Bean
-        fun propertyPlaceholderConfigurer(): PropertyPlaceholderConfigurer {
-            val configurer = PropertyPlaceholderConfigurer()
-            configurer.setLocation(ClassPathResource("app.properties"))
-            return configurer
-        }
+//        @Bean
+//        fun propertyPlaceholderConfigurer(): PropertyPlaceholderConfigurer {
+//            val configurer = PropertyPlaceholderConfigurer()
+//            configurer.setLocation(ClassPathResource("app.properties"))
+//            return configurer
+//        }
     }
 
 }

@@ -14,8 +14,6 @@ import com.sun.jna.platform.win32.BaseTSD
 class Act {
 
 
-
-
     @HostAccess.Export
     fun sendCharErr() {
 
