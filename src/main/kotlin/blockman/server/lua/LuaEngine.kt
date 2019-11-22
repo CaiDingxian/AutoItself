@@ -1,5 +1,8 @@
 package org.luaj.vm2.lib.jse
 
+import blockman.native.api.Adv
+import blockman.native.api.Ime
+import blockman.native.api.Input
 import blockman.native.api.Win
 import org.luaj.vm2.LuaValue
 import org.luaj.vm2.Globals
@@ -7,6 +10,7 @@ import org.luaj.vm2.LoadState
 import org.luaj.vm2.Varargs
 import org.luaj.vm2.compiler.LuaC
 import org.luaj.vm2.lib.*
+import java.io.File
 
 val globals = Globals()
 fun main() {
@@ -17,7 +21,7 @@ fun main() {
 }
 
 class LuaEngine {
-    fun runLua(script: String) {
+    fun runLua(scriptPath: String) {
         //val globals = JsePlatform.standardGlobals()
 
         globals.load(JseBaseLib())
@@ -28,29 +32,19 @@ class LuaEngine {
         //globals.load(CoroutineLib())
         globals.load(JseMathLib())
         globals.load(JseIoLib())
-        //globals.load(JseOsLib())
+        globals.load(JseOsLib())
         val l = LuajavaLib()
         globals.load(l)
+        globals.load(DebugLib())
         LoadState.install(globals)
-
         LuaC.install(globals)
+
+
         //globals.load(DebugLib())
         //val sethook = globals.get("debug").get("sethook")
         //globals.set("debug", LuaValue.NIL)
+        val chunk = globals.loadfile(scriptPath)
 
-        val chunk = globals.load(
-            """
-                function a() 
-                    return 0 
-                end
-                w:go(a)
-                -- w:getWinContent6947888
-                --w:setWinContent(6947888,"你好吗")
-            --w:msgChar(6947888,'你',false)
-            --w:msgChar(6947888,'是',false)
-            --w:msgChar(6947888,'猪',false)
-        """.trimIndent()
-        )
         val s = object : VarArgFunction() {
             override fun invoke(args: Varargs): LuaValue {
                 var a = args
@@ -62,7 +56,10 @@ class LuaEngine {
 
         Object().getClass()
         //如果设置x=?,将会切断x与LuaValue的连接，GC可以回收对象
-        globals.set("w", SafeJavaInstance(Win()))
+        globals.set("win", SafeJavaInstance(Win()))
+        globals.set("input", SafeJavaInstance(Input()))
+        globals.set("adv", SafeJavaInstance(Adv()))
+        globals.set("ime", SafeJavaInstance(Ime()))
         val a = chunk.invoke()
         //chunk.call()
         val b = 3
