@@ -8,6 +8,7 @@ import com.sun.jna.platform.win32.WTypes
 import com.sun.jna.platform.win32.WinDef
 import com.sun.jna.platform.win32.WinUser
 import org.graalvm.polyglot.HostAccess
+import java.util.regex.Pattern
 
 class Win {
     fun go(any: String)
@@ -18,33 +19,42 @@ class Win {
 
     @HostAccess.Export
     fun getTopWin(): Long? {
-        return Pointer.nativeValue(u32.GetForegroundWindow().pointer)
+        return u32.GetForegroundWindow()?.let{
+            Pointer.nativeValue(it.pointer)
+        }
+
     }
 
     @HostAccess.Export
     fun getFocusWin(): Long? {
-        return Pointer.nativeValue(u32.GetFocus().pointer)
+        return u32.GetFocus()?.let{
+            Pointer.nativeValue(it.pointer)
+        }
+
     }
 
     @HostAccess.Export
     fun getActiveWin(): Long? {
-        return Pointer.nativeValue(u32.GetActiveWindow().pointer)
+        return u32.GetActiveWindow()?.let{
+                Pointer.nativeValue(it.pointer)
+            }
     }
 
     @HostAccess.Export
     fun findWin(className: String?, name: String?): Long? {
-        return Pointer.nativeValue(u32.FindWindow(className, name).pointer)
+        return u32.FindWindow(className, name)?.let{
+            Pointer.nativeValue(it.pointer)
+        }
     }
 
     @HostAccess.Export
     fun findWinEx(hwnd: Long?, chwnd: Long?, className: String?, name: String?): Long? {
-        return Pointer.nativeValue(
-            u32.FindWindowEx(
-                hwnd?.let { WinDef.HWND(Pointer(it)) },
-                chwnd?.let { WinDef.HWND(Pointer(it)) },
-                className, name
-            ).pointer
-        )
+        return u32.FindWindowEx(
+            hwnd?.let { WinDef.HWND(Pointer(it)) },
+            chwnd?.let { WinDef.HWND(Pointer(it)) },
+            className, name
+        )?.let { Pointer.nativeValue(it.pointer) }
+
     }
 
     fun closeWin(hwnd: Long): Boolean {
@@ -72,14 +82,14 @@ class Win {
         )
     }
 
-    fun getWinContent(hwnd: Long) {
+    fun getWinContent(hwnd: Long): String? {
         var strs = Native.malloc(Native.WCHAR_SIZE * 100L)
         u32.SendMessage(
             WinDef.HWND(Pointer(hwnd)), WM_GETTEXT, WinDef.WPARAM(16), WinDef.LPARAM(strs)
         )
         val b = WTypes.LPWSTR(Pointer(strs)).value
         Native.free(strs)
-        print(b)
+        return b
     }
 
     @HostAccess.Export
@@ -168,6 +178,25 @@ class Win {
             println(q)
         }
         return q
+    }
+
+    fun getWinByQueryStr(pathStr:String)
+    {
+    val pathStr = "class:[[SunAwtFrame]] title:[[TestModSys [D:\\DEV\\TestModSys0\\TestModSys] - ...\\src\\main\\kotlin\\blockman\\swin\\caller\\api\\Win.kt [TestModSys.main] - IntelliJ IDEA (Administrator)]] \n"
+    val pathStrs = pathStr.split("=>")
+    for (pStr in pathStrs) {
+        val c = Pattern.compile("class:\\[\\[(.*?)\\]\\]")
+        val t = Pattern.compile("title:\\[\\[(.*?)\\]\\]")
+        val n =Pattern.compile("num:\\[\\[(.*?)\\]\\]")
+        val cm = c.matcher(pStr)
+        val tm=t.matcher(pStr)
+        val nm=t.matcher(pStr)
+        cm.find()
+        tm.find()
+        nm.find()
+        val g = cm.group(1)
+        val x = 0
+    }
     }
 
 
