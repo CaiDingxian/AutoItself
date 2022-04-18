@@ -6,6 +6,8 @@ AutoItself是类 AutoIt 软件，用于Windows机器执行键盘，鼠标，窗�
 
 基于JNA技术访问windows api，基于graalVM支持Javascript脚本，基于luaj支持Lua脚本
 
+***(注意：该项目处于实验阶段，并非开箱即用，欢迎一同完善)***
+
 ### 平台
 
 相比VBS和C，相信你会更爱Lua和JS的灵活性和Jdk信手拈来的创造力
